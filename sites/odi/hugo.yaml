@@ -1,10 +1,10 @@
-baseURL: https://rubenrouwhof.github.io/odi-startpagina/
+baseURL: https://ambtenaar-hendriks.github.io/ODI
 title: ODI Startpagina
 defaultContentLanguage: nl
 
 params:
   # Eén plek voor de repo-URL, zodat links in de content niet verouderen.
-  repo: https://github.com/rubenrouwhof/odi-startpagina
+  repo: https://github.com/Ambtenaar-Hendriks/ODI
 
   # Deze site is een experimenteerkopie; de balk maakt dat zichtbaar voor
   # bezoekers. Weglaten laat de balk verdwijnen. De balk is één regel met
@@ -13,13 +13,9 @@ params:
     variant: warning
     tekst: Probeersel op persoonlijke titel - geen officiële uiting van ODI
   tagline: Rijksorganisatie voor Ontwikkeling, Digitalisering en Innovatie
-  description: De startplek voor kennis over digitalisering binnen het ODI. Vind expertises, kennisbronnen en tools op één plek.
+  description: Een plek voor persoonlijke probeersels.
 
-  footer:
-    tagline: Eén Overheid. Voor iedereen!
-    links: Zie ook
-    rechts: Over deze site
-
+ 
 # Zie sites/kennisbank-pm/hugo.yaml: de vormgeving komt uit ../../gedeeld.
 module:
   mounts:
@@ -36,14 +32,6 @@ module:
     - source: ../../gedeeld/static
       target: static
 
-# De vijf assen waarop de kennisbank bronnen classificeert.
-taxonomies:
-  soort: soorten
-  doelgroep: doelgroepen
-  fase: fases
-  thema: themas
-  odi_thema: odi_thema_values
-  expertise: expertises 
 
 enableRobotsTXT: true
 
@@ -64,23 +52,8 @@ menus:
     - name: Home
       pageRef: /
       weight: 1
-    - name: Kennisbank
-      pageRef: /kennisbank
-      weight: 2
-    - name: Opdrachtenbank
-      pageRef: /opdrachtenbank
-      weight: 3
-    - name: Bijdragen
-      pageRef: /kennisbank/bijdragen
-      weight: 4
-
-
-  footer-links:
-    - name: Expertises
-      pageRef: /expertises
-      weight: 1
-    - name: Kennisbronnen
-      pageRef: /kennisbronnen
+    - name: Complexiteitsscore
+      pageRef: /complexiteitsscore
       weight: 2
 
   footer-rechts:
