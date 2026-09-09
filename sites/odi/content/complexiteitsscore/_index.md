@@ -1,5 +1,5 @@
 ---
-title: "Complexiteitscore Invullen"
+title: "Complexiteitsscore Invullen"
 type: "complexiteitsscore"
 ---
 
