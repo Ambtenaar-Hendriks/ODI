@@ -315,13 +315,22 @@ line-height: 1.3;
 .score-toelichting-toggle {
 cursor: pointer;
 color: var(--primary-color);
+font: inherit;
 font-size: 0.9rem;
 margin-left: 4px;
+padding: 0 2px;
+background: none;
+border: 0;
+border-radius: 4px;
 display: inline-block;
 vertical-align: middle;
 }
 .score-toelichting-toggle:hover {
-text-decoration: underline;
+background-color: var(--neutral-button-bg);
+}
+.score-toelichting-toggle:focus-visible {
+outline: var(--semantics-focus-ring-outline);
+outline-offset: var(--semantics-focus-ring-outline-offset);
 }
 .score-toelichting {
 font-size: 0.75rem;
@@ -1084,6 +1093,13 @@ event.preventDefault();
 zetScore(slider, nieuw);
 }
 
+function zetToelichtingOpen(dimensieNr, open) {
+const scoreToelichting = document.getElementById(`score-toelichting-${dimensieNr}`);
+const knop = document.getElementById(`score-toelichting-knop-${dimensieNr}`);
+if (scoreToelichting) scoreToelichting.classList.toggle('active', open);
+if (knop) knop.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
 function updateSlider(event) {
 const slider = event.target;
 const dimensieNr = slider.dataset.dimensie;
@@ -1101,11 +1117,9 @@ if (scoreCell) scoreCell.textContent = score === 0 ? '–' : score;
 if (toelichtingInput) {
 updateToelichtingBorder({ target: toelichtingInput });
 }
-if (sliderDescription) {
-const dimensie = dimensies.find(d => d.nr == dimensieNr);
-if (dimensie) {
-sliderDescription.textContent = score === 0 ? 'Maak een keuze' : dimensie.scores[score];
-}
+if (sliderDescription && dimensieVoorTekst) {
+// Alleen de tekst vervangen; de ℹ️-knop ernaast moet blijven staan.
+sliderDescription.querySelector('.slider-description-tekst').textContent = score === 0 ? 'Maak een keuze' : dimensieVoorTekst.scores[score];
 }
 sliderLabels.forEach(label => {
 label.classList.toggle('active', parseInt(label.dataset.value) === score);
@@ -1132,7 +1146,7 @@ scoreList.appendChild(listItem);
 }
 });
 }
-scoreToelichting.classList.add('active');
+zetToelichtingOpen(dimensieNr, true);
 }
 }
 berekenTotaalscore();
@@ -1234,16 +1248,23 @@ sliderDescriptionContainer.className = 'slider-description-container';
 const sliderDescription = document.createElement('div');
 sliderDescription.className = 'slider-description';
 sliderDescription.id = `slider-desc-${dimensie.nr}`;
-sliderDescription.textContent = 'Maak een keuze';
+const sliderDescriptionTekst = document.createElement('span');
+sliderDescriptionTekst.className = 'slider-description-tekst';
+sliderDescriptionTekst.textContent = 'Maak een keuze';
+sliderDescription.appendChild(sliderDescriptionTekst);
 
-const toggleIcon = document.createElement('span');
+const toggleIcon = document.createElement('button');
+toggleIcon.type = 'button';
 toggleIcon.className = 'score-toelichting-toggle';
+toggleIcon.id = `score-toelichting-knop-${dimensie.nr}`;
 toggleIcon.textContent = 'ℹ️';
-toggleIcon.title = 'Toon score-toelichtingen';
+toggleIcon.title = 'Toon of verberg de toelichting per score';
+toggleIcon.setAttribute('aria-label', `Toelichting per score voor ${dimensie.naam}`);
+toggleIcon.setAttribute('aria-controls', `score-toelichting-${dimensie.nr}`);
+toggleIcon.setAttribute('aria-expanded', 'false');
 toggleIcon.addEventListener('click', function(e) {
 e.stopPropagation();
-const scoreToelichting = document.getElementById(`score-toelichting-${dimensie.nr}`);
-scoreToelichting.classList.toggle('active');
+zetToelichtingOpen(dimensie.nr, toggleIcon.getAttribute('aria-expanded') !== 'true');
 });
 sliderDescription.appendChild(toggleIcon);
 sliderDescriptionContainer.appendChild(sliderDescription);
