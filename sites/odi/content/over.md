@@ -2,22 +2,28 @@
 title: Over deze site
 ---
 
-ODI Start is de startplek voor kennis over digitalisering binnen het ODI. De
-site is bedoeld als vertrekpunt: je vindt hier welke expertises er zijn, waar
-de kennis staat en welke tools beschikbaar zijn.
+De Werkplaats projectmanagement is opgezet en wordt bijgehouden **op
+persoonlijke titel**. De site bundelt hulpmiddelen die helpen bij
+werkzaamheden op het gebied van projectmanagement, zoals de
+[Complexiteitsscore]({{< relref "/complexiteitsscore" >}}).
+
+De site is geen officiële uiting van ODI of de Rijksoverheid. Aan de inhoud
+kunnen geen rechten worden ontleend.
 
 ## Uitgangspunten
 
-Deze eerste versie ('Phase 0') is bewust klein gehouden:
-
-- **We verwijzen, we herbouwen niet.** Bestaande bronnen zoals Wies en ZAD
-  blijven waar ze zijn; deze site linkt ernaar.
-- **We sluiten aan bij Wies.** De expertise-indeling is dezelfde, zodat je van
-  een expertise direct naar de collega's kunt die er vanuit werken.
-- **Beheer via Git.** Nieuwe informatie staat als markdown in de repository en
-  gaat via een pull request live.
+- **Praktisch bruikbaar.** Elk hulpmiddel moet direct inzetbaar zijn in het
+  dagelijkse werk, zonder installatie of account.
+- **Je gegevens blijven bij jou.** Wat je invult, wordt alleen in je eigen
+  browser opgeslagen. Er gaat niets naar een server en niemand anders kan het
+  inzien. Wil je iets delen, gebruik dan de export.
+- **Herkenbare vormgeving.** De site gebruikt het NLDD design system van de
+  Rijksoverheid, inclusief een lichte en donkere weergave.
+- **Open beheer.** De broncode staat openbaar op GitHub. Wijzigingen gaan via
+  een pull request live, en per hulpmiddel staat bij "Wat is er nieuw?" wat er
+  is veranderd.
 
 ## Status
 
-Dit is een proof of concept. Van enkele bronnen en tools is de definitieve
-locatie nog niet bekend; die staan gemarkeerd als "nog geen link".
+De site is in ontwikkeling en wordt stap voor stap uitgebreid. Suggesties of
+een fout gevonden? Meld het via de [repository op GitHub](https://github.com/Ambtenaar-Hendriks/ODI/issues).

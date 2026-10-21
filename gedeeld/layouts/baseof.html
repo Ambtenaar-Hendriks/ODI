@@ -23,7 +23,6 @@
       {{- block "main" . }}{{ end -}}
       {{ partial "footer.html" . }}
     </nldd-page>
-    {{ if site.Params.zoeken | default true }}{{ partial "zoeken.html" . }}{{ end }}
     {{ partial "scripts.html" . }}
   </body>
 </html>

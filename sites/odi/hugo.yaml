@@ -16,7 +16,7 @@ params:
   description: Een plek voor persoonlijke probeersels.
 
  
-# Zie sites/kennisbank-pm/hugo.yaml: de vormgeving komt uit ../../gedeeld.
+# De vormgeving (layouts, CSS en het NLDD design system) komt uit ../../gedeeld.
 module:
   mounts:
     - source: content
@@ -45,8 +45,6 @@ markup:
     renderer:
       unsafe: true
 
-# Expertises en Kennisbronnen staan al als blok op de homepage en in de
-# footer; in de balk zouden ze dat dubbelop doen.
 menus:
   main:
     - name: Home
@@ -61,7 +59,7 @@ menus:
       pageRef: /over
       weight: 1
 
-outputs:
-  home:
-    - HTML
-    - JSON
+# Geen tags of categorieën: de site heeft geen overzichtspagina's per term.
+disableKinds:
+  - taxonomy
+  - term
