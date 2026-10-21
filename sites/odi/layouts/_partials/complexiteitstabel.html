@@ -562,8 +562,11 @@ font-weight: bold;
 </div>
 <script>
 const STORAGE_KEY = 'complexiteitscore_versions';
+const AUTO_SAVE_KEY = 'auto-save-enabled';
+const AUTO_SAVE_NAAM = 'Auto-opslaan';
 let autoSaveEnabled = false;
 let autoSaveInterval = null;
+let laatsteAutoSnapshot = null;
 let totaalscoreElement = null;
 let exportMenu = null;
 
@@ -908,29 +911,48 @@ showNotification('Versie verwijderd', 'success');
 }
 }
 
-function toggleAutoSave() {
-autoSaveEnabled = !autoSaveEnabled;
+// Auto-opslaan bewaart één vaste versie en overschrijft die alleen als er iets is gewijzigd.
+// Zo groeit de versielijst niet en overschrijft een lege pagina geen eerder werk.
+function autoSaveNu() {
+const data = getExportData().data;
+const snapshot = JSON.stringify(data);
+if (snapshot === laatsteAutoSnapshot) return;
+laatsteAutoSnapshot = snapshot;
+const versions = loadVersions().filter(version => !version.auto);
+versions.push({
+name: AUTO_SAVE_NAAM,
+date: new Date().toISOString(),
+data: data,
+auto: true
+});
+localStorage.setItem(STORAGE_KEY, JSON.stringify(versions));
+updateVersionList();
+}
+
+function startAutoSave() {
 const button = document.getElementById('auto-save-toggle');
 button.textContent = `Auto-opslaan: ${autoSaveEnabled ? 'AAN' : 'UIT'}`;
+clearInterval(autoSaveInterval);
 if (autoSaveEnabled) {
-clearInterval(autoSaveInterval);
-autoSaveInterval = setInterval(() => {
-saveVersion(`Auto-opslaan ${new Date().toLocaleTimeString('nl-NL')}`);
-}, 30000);
-showNotification('Auto-opslaan ingeschakeld (elke 30 seconden)', 'success');
+laatsteAutoSnapshot = JSON.stringify(getExportData().data);
+autoSaveInterval = setInterval(autoSaveNu, 30000);
+}
+}
+
+function toggleAutoSave() {
+autoSaveEnabled = !autoSaveEnabled;
+localStorage.setItem(AUTO_SAVE_KEY, autoSaveEnabled ? 'true' : 'false');
+startAutoSave();
+if (autoSaveEnabled) {
+showNotification('Auto-opslaan ingeschakeld: wijzigingen worden elke 30 seconden bewaard als versie "Auto-opslaan"', 'success');
 } else {
-clearInterval(autoSaveInterval);
 showNotification('Auto-opslaan uitgeschakeld', 'success');
 }
 }
 
 function checkAutoSave() {
-const savedState = localStorage.getItem('auto-save-enabled');
-if (savedState === 'true') {
-autoSaveEnabled = true;
-document.getElementById('auto-save-toggle').textContent = 'Auto-opslaan: AAN';
-toggleAutoSave();
-}
+autoSaveEnabled = localStorage.getItem(AUTO_SAVE_KEY) === 'true';
+startAutoSave();
 }
 
 function getExportData() {
