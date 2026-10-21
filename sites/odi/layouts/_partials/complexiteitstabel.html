@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Complexiteitscore invullen</title>
 <style>
 :root {
 --table-bg: transparent;
@@ -55,18 +49,8 @@
 --highlight-border: #ff5555;
 }
 }
-body {
-font-family: Arial, sans-serif;
-margin: 0;
-padding: 20px;
-background-color: #fff;
+.complexiteitstool {
 color: var(--text-color);
-position: relative;
-}
-@media (prefers-color-scheme: dark) {
-body {
-background-color: #121212;
-}
 }
 .save-controls {
 margin-bottom: 20px;
@@ -175,9 +159,10 @@ display: flex;
 gap: 5px;
 }
 .export-container {
-position: absolute;
-top: 20px;
-right: 20px;
+position: relative;
+display: flex;
+justify-content: flex-end;
+margin-bottom: 10px;
 z-index: 1000;
 }
 .export-button {
@@ -441,10 +426,6 @@ font-size: 0.9rem;
 .slider-cell {
 min-width: 180px;
 }
-.export-container {
-top: 10px;
-right: 10px;
-}
 }
 @media print {
 body > *:not(#print-area) {
@@ -498,8 +479,7 @@ font-weight: bold;
 }
 }
 </style>
-</head>
-<body>
+<div class="complexiteitstool">
 <div class="save-controls">
 <input type="text" id="version-name" placeholder="Naam van de versie (bijv. Versie 1)" />
 <button id="save-version" class="btn btn-neutral">Opslaan als nieuwe versie</button>
@@ -1165,5 +1145,4 @@ window.loadVersionFromList = loadVersionFromList;
 window.deleteVersion = deleteVersion;
 });
 </script>
-</body>
-</html>
+</div>
