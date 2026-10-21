@@ -14,9 +14,8 @@
   <nldd-menu-bar slot="global" accessible-label="Hoofdnavigatie">
     {{- range site.Menus.main -}}
       {{- /* Home is alleen actief op de homepage zelf; de andere items ook op
-             hun onderliggende pagina's. Bij geneste items (/kennisbank/ en
-             /kennisbank/bijdragen/) zou dat er twee tegelijk oplichten, dus
-             wint het langste pad dat past. */ -}}
+             hun onderliggende pagina's. Bij geneste items zou dat er twee
+             tegelijk oplichten, dus wint het langste pad dat past. */ -}}
       {{- $url := .URL -}}
       {{- $langste := "" -}}
       {{- range site.Menus.main -}}
@@ -32,13 +31,4 @@
       ></nldd-menu-bar-item>
     {{- end -}}
   </nldd-menu-bar>
-  {{- if site.Params.zoeken | default true -}}
-  <nldd-button
-    slot="utility"
-    variant="neutral-transparent"
-    start-icon="search"
-    text="Zoeken"
-    data-zoek-open
-  ></nldd-button>
-  {{- end -}}
 </nldd-top-navigation-bar>
