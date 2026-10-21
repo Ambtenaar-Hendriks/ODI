@@ -1,0 +1,65 @@
+{{- /* Versie en wijzigingen van de Complexiteitsscore, uit
+       data/complexiteitsscore_versies.yaml (nieuwste bovenaan). Het label
+       "Vernieuwd" staat standaard verborgen; het script toont het tot 30 dagen
+       na de datum, zodat het niet blijft staan als de site lang niet is
+       gebouwd. */ -}}
+{{- with hugo.Data.complexiteitsscore_versies -}}
+<style>
+.complexiteitsversie {
+color: var(--semantics-content-secondary-color);
+font-size: 0.9rem;
+}
+.complexiteitsversie-regel {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: var(--primitives-space-8);
+margin: 0 0 var(--primitives-space-4);
+}
+.complexiteitsversie-details summary {
+cursor: pointer;
+color: var(--semantics-content-accent-color);
+}
+.complexiteitsversie-details summary:focus-visible {
+outline: var(--semantics-focus-ring-outline);
+outline-offset: var(--semantics-focus-ring-outline-offset);
+}
+.complexiteitsversie-details h3 {
+font-size: 0.95rem;
+color: var(--semantics-content-color);
+margin: var(--primitives-space-12) 0 var(--primitives-space-4);
+}
+.complexiteitsversie-details ul {
+margin: 0;
+padding-left: 20px;
+}
+</style>
+{{- $huidig := index . 0 -}}
+{{- $datum := time.AsTime $huidig.datum -}}
+<div class="complexiteitsversie" data-datum="{{ $datum.Format "2006-01-02" }}">
+  <p class="complexiteitsversie-regel">
+    Versie {{ $huidig.versie }} · bijgewerkt op {{ $datum | time.Format ":date_long" }}
+    {{- /* hidden op een span eromheen: een webcomponent zet zelf een display
+           en kan het hidden-attribuut daarmee overschrijven. */}}
+    <span class="complexiteitsversie-label" hidden><nldd-tag size="sm" color="accent" text="Vernieuwd"></nldd-tag></span>
+  </p>
+  <details class="complexiteitsversie-details">
+    <summary>Wat is er nieuw?</summary>
+    {{- range . }}
+    <h3>Versie {{ .versie }} ({{ time.AsTime .datum | time.Format ":date_long" }})</h3>
+    <ul>
+      {{- range .wijzigingen }}
+      <li>{{ . }}</li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  </details>
+</div>
+<script>
+(function() {
+const blok = document.currentScript.previousElementSibling;
+const dagen = (Date.now() - new Date(blok.dataset.datum).getTime()) / 86400000;
+if (dagen <= 30) blok.querySelector('.complexiteitsversie-label').hidden = false;
+})();
+</script>
+{{- end -}}
