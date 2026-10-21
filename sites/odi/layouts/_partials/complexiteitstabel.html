@@ -386,7 +386,7 @@ color: var(--text-secondary);
 margin-top: 4px;
 line-height: 1.3;
 }
-.nldd-table input[type="text"] {
+.nldd-table textarea {
 width: 100%;
 padding: 8px;
 border: 1px solid var(--input-border);
@@ -395,14 +395,18 @@ box-sizing: border-box;
 margin-top: 4px;
 background-color: var(--input-bg);
 color: var(--text-color);
+font: inherit;
+line-height: 1.4;
+resize: vertical;
+overflow-y: hidden;
 }
-.nldd-table input[type="text"].score-selected:not(:placeholder-shown) {
+.nldd-table textarea.score-selected:not(:placeholder-shown) {
 border: 1px solid var(--input-border) !important;
 }
-.nldd-table input[type="text"].score-selected:placeholder-shown {
+.nldd-table textarea.score-selected:placeholder-shown {
 border: 2px solid var(--highlight-border) !important;
 }
-.nldd-table input[type="text"]::placeholder {
+.nldd-table textarea::placeholder {
 color: var(--text-secondary);
 }
 .toelichting-aspecten {
@@ -681,7 +685,7 @@ function loadVersion(version) {
 if (!version) return;
 version.data.forEach(item => {
 const slider = document.getElementById(`slider-${item.nr}`);
-const toelichtingInput = document.querySelector(`input[type="text"][data-dimensie="${item.nr}"]`);
+const toelichtingInput = document.querySelector(`textarea[data-dimensie="${item.nr}"]`);
 if (slider) {
 if (item.score !== '-') {
 const score = parseInt(item.score);
@@ -694,6 +698,7 @@ updateSlider({ target: slider });
 if (toelichtingInput) {
 toelichtingInput.value = item.toelichting || '';
 updateToelichtingBorder({ target: toelichtingInput });
+pasHoogteAan(toelichtingInput);
 }
 });
 showNotification(`Versie "${version.name}" geladen`, 'success');
@@ -799,7 +804,7 @@ function getExportData() {
 const data = [];
 dimensies.forEach(dimensie => {
 const slider = document.getElementById(`slider-${dimensie.nr}`);
-const toelichtingInput = document.querySelector(`input[type="text"][data-dimensie="${dimensie.nr}"]`);
+const toelichtingInput = document.querySelector(`textarea[data-dimensie="${dimensie.nr}"]`);
 if (slider) {
 const sliderValue = parseFloat(slider.value);
 let score = 0;
@@ -852,7 +857,8 @@ let md = '# Complexiteitscore\n\n';
 md += '| Nr. | Complexiteitsdimensie | Score | Beschrijving | Toelichting |\n';
 md += '|-----|------------------------|-------|---------------|-------------|\n';
 data.forEach(item => {
-md += `| ${item.nr} | ${item.naam} | ${item.score} | ${item.scoreText} | ${item.toelichting} |\n`;
+const cel = (text) => String(text).replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+md += `| ${item.nr} | ${item.naam} | ${item.score} | ${cel(item.scoreText)} | ${cel(item.toelichting)} |\n`;
 });
 md += `\n**Totaalscore:** ${totaalscore}\n`;
 const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
@@ -918,7 +924,7 @@ if (sliderValue > 0) {
 score = Math.round((sliderValue - 12.5) / 25) + 1;
 }
 const scoreCell = document.getElementById(`score-${dimensieNr}-waarde`);
-const toelichtingInput = document.querySelector(`input[type="text"][data-dimensie="${dimensieNr}"]`);
+const toelichtingInput = document.querySelector(`textarea[data-dimensie="${dimensieNr}"]`);
 const sliderDescription = document.getElementById(`slider-desc-${dimensieNr}`);
 const sliderLabels = document.querySelectorAll(`.slider-label[data-dimensie="${dimensieNr}"]`);
 const scoreToelichting = document.getElementById(`score-toelichting-${dimensieNr}`);
@@ -980,6 +986,11 @@ input.classList.add('score-selected');
 input.classList.remove('score-selected');
 }
 }
+}
+
+function pasHoogteAan(textarea) {
+textarea.style.height = 'auto';
+textarea.style.height = `${textarea.scrollHeight + 2}px`;
 }
 
 function berekenTotaalscore() {
@@ -1098,11 +1109,12 @@ row.appendChild(scoreCell);
 
 const toelichtingCell = document.createElement('td');
 toelichtingCell.className = 'nldd-table__cell toelichting-cell';
-const toelichtingInput = document.createElement('input');
-toelichtingInput.type = 'text';
+const toelichtingInput = document.createElement('textarea');
+toelichtingInput.rows = 3;
 toelichtingInput.placeholder = 'Voeg hier je toelichting toe';
 toelichtingInput.dataset.dimensie = dimensie.nr;
 toelichtingInput.addEventListener('input', updateToelichtingBorder);
+toelichtingInput.addEventListener('input', () => pasHoogteAan(toelichtingInput));
 toelichtingCell.appendChild(toelichtingInput);
 row.appendChild(toelichtingCell);
 
