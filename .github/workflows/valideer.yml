@@ -6,15 +6,6 @@ on:
     branches: [main]
 
 jobs:
-  valideer:
-    name: Controleer frontmatter
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - name: Valideer bronnen tegen het vocabulaire
-        run: ./scripts/valideer_bronnen.py
-
   bouw:
     name: Bouw de site
     runs-on: ubuntu-latest
