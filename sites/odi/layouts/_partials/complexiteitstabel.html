@@ -536,6 +536,8 @@ font-weight: bold;
 </ol>
 </div>
 <script>
+// Schrijfwijze met één s blijft bewust: met een andere sleutel zien gebruikers
+// hun eerder opgeslagen versies niet meer.
 const STORAGE_KEY = 'complexiteitscore_versions';
 const AUTO_SAVE_KEY = 'auto-save-enabled';
 const AUTO_SAVE_NAAM = 'Auto-opslaan';
@@ -836,6 +838,17 @@ notification.style.display = 'none';
 }, 3000);
 }
 
+// Eigen invoer (versienamen, toelichtingen) gaat altijd hierdoor voordat hij in
+// HTML terechtkomt, zodat tekens als < en & als tekst worden getoond.
+function escapeHtml(tekst) {
+return String(tekst)
+.replace(/&/g, '&amp;')
+.replace(/</g, '&lt;')
+.replace(/>/g, '&gt;')
+.replace(/"/g, '&quot;')
+.replace(/'/g, '&#39;');
+}
+
 function updateVersionList() {
 const versionList = document.getElementById('version-list');
 const versions = loadVersions();
@@ -847,14 +860,15 @@ return;
 versions.forEach((version, index) => {
 const versionElement = document.createElement('div');
 versionElement.className = 'version-item';
+const naam = escapeHtml(version.name);
 versionElement.innerHTML = `
 <div class="version-info">
-<span class="version-name">${version.name}</span>
-<span class="version-date">${new Date(version.date).toLocaleString('nl-NL')}</span>
+<span class="version-name">${naam}</span>
+<span class="version-date">${escapeHtml(new Date(version.date).toLocaleString('nl-NL'))}</span>
 </div>
 <div class="version-actions">
-<button onclick="loadVersionFromList(${index})" class="btn btn-neutral" title="Laad deze versie">Laad</button>
-<button onclick="deleteVersion(${index})" class="btn btn-neutral" title="Verwijder deze versie">×</button>
+<button onclick="loadVersionFromList(${index})" class="btn btn-neutral" title="Laad deze versie" aria-label="Laad versie ${naam}">Laad</button>
+<button onclick="deleteVersion(${index})" class="btn btn-neutral" title="Verwijder deze versie" aria-label="Verwijder versie ${naam}">×</button>
 </div>
 `;
 versionList.appendChild(versionElement);
@@ -984,7 +998,7 @@ const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 const url = URL.createObjectURL(blob);
 const link = document.createElement('a');
 link.href = url;
-link.download = 'complexiteitscore.csv';
+link.download = 'complexiteitsscore.csv';
 document.body.appendChild(link);
 link.click();
 document.body.removeChild(link);
@@ -993,7 +1007,7 @@ exportMenu.classList.remove('show');
 
 function exportMD() {
 const { data, totaalscore, duiding } = getExportData();
-let md = '# Complexiteitscore\n\n';
+let md = '# Complexiteitsscore\n\n';
 md += '| Nr. | Complexiteitsdimensie | Score | Beschrijving | Toelichting |\n';
 md += '|-----|------------------------|-------|---------------|-------------|\n';
 data.forEach(item => {
@@ -1009,7 +1023,7 @@ const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
 const url = URL.createObjectURL(blob);
 const link = document.createElement('a');
 link.href = url;
-link.download = 'complexiteitscore.md';
+link.download = 'complexiteitsscore.md';
 document.body.appendChild(link);
 link.click();
 document.body.removeChild(link);
@@ -1021,7 +1035,7 @@ const { data, totaalscore, duiding } = getExportData();
 const printArea = document.createElement('div');
 printArea.id = 'print-area';
 printArea.innerHTML = `
-<h1>Complexiteitscore Resultaten</h1>
+<h1>Complexiteitsscore Resultaten</h1>
 <table>
 <thead>
 <tr>
@@ -1036,10 +1050,10 @@ printArea.innerHTML = `
 ${data.map(item => `
 <tr>
 <td>${item.nr}</td>
-<td>${item.naam}</td>
+<td>${escapeHtml(item.naam)}</td>
 <td>${item.score}</td>
-<td>${item.scoreText.replace(/\n/g, '<br>')}</td>
-<td>${(item.toelichting || '-').replace(/\n/g, '<br>')}</td>
+<td>${escapeHtml(item.scoreText).replace(/\n/g, '<br>')}</td>
+<td>${escapeHtml(item.toelichting || '-').replace(/\n/g, '<br>')}</td>
 </tr>`).join('')}
 </tbody>
 <tfoot>
