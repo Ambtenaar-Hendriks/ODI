@@ -12,6 +12,8 @@
     - De toelichting per score (ℹ️) is een knop die ook met het toetsenbord werkt, en blijft zichtbaar nadat je een score kiest.
     - Kleuren volgen de lichte of donkere weergave van de site.
     - Auto-opslaan onthoudt de instelling en bewaart één versie die alleen bij wijzigingen wordt bijgewerkt.
+    - Versienamen en toelichtingen worden veilig getoond, ook als ze tekens als < of & bevatten.
+    - De naam is overal "Complexiteitsscore", ook in de exports en de bestandsnamen van downloads.
     - "Opgelost: helemaal naar rechts slepen gaf een score van 5."
     - "Opgelost: de link naar de IPMA-invulinstructie werkte niet."
 - versie: "1.0"
